@@ -26,7 +26,6 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
-  #debugger
   if uncheck.nil?
     ratings = rating_list.split(",")
     ratings.each do |rating|
@@ -61,9 +60,6 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  #page.should have_css("table#movies tbody tr", :count == 7)
-  movie_count = Movie.count
-  page.should have_css("table#movies tbody tr", :count => movie_count)
-  #debugger
+  page.should have_css("table#movies tbody tr", :count => Movie.count)
   #flunk "Unimplemented"
 end
