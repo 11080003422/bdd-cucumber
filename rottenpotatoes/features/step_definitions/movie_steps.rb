@@ -8,6 +8,7 @@ Given /the following movies exist/ do |movies_table|
   #flunk "Unimplemented"
 end
 
+
 # Make sure that one string (regexp) occurs before or after another one
 #   on the same page
 
@@ -47,14 +48,12 @@ Then /I should (not )?see movies with the following ratings: (.*)/ do |neg, rati
     ratings = rating_list.split(",")
     ratings.each do |rating|
       rating.strip!
-      #steps %Q{Then I should see "#{rating}"}
       steps %Q{Then I should see /^#{rating}$/}
     end
   elsif neg
     ratings = rating_list.split(",")
     ratings.each do |rating|
       rating.strip!
-      #steps %Q{Then I should not see /<td>#{rating}/}
       steps %Q{Then I should not see /^#{rating}$/}
     end
   end 
@@ -62,5 +61,9 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  flunk "Unimplemented"
+  #page.should have_css("table#movies tbody tr", :count == 7)
+  movie_count = Movie.count
+  page.should have_css("table#movies tbody tr", :count => movie_count)
+  #debugger
+  #flunk "Unimplemented"
 end
