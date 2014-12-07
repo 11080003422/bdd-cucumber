@@ -1,11 +1,11 @@
 # Add a declarative step here for populating the DB with movies.
-
 Given /the following movies exist/ do |movies_table|
   movies_table.hashes.each do |movie|
     # each returned element will be a hash whose key is the table header.
     # you should arrange to add that movie to the database here.
+    Movie.create(movie)
   end
-  flunk "Unimplemented"
+  #flunk "Unimplemented"
 end
 
 # Make sure that one string (regexp) occurs before or after another one
@@ -25,7 +25,39 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
-  flunk "Unimplemented"
+  #debugger
+  if uncheck.nil?
+    ratings = rating_list.split(",")
+    ratings.each do |rating|
+      rating.strip!
+      steps %Q{When I check "ratings_#{rating}"}
+    end
+  elsif uncheck
+    ratings = rating_list.split(",")
+    ratings.each do |rating|
+      rating.strip!
+      steps %Q{When I uncheck "ratings_#{rating}"}
+    end
+  end
+  #flunk "Unimplemented"
+end
+
+Then /I should (not )?see movies with the following ratings: (.*)/ do |neg, rating_list|
+  if neg.nil?
+    ratings = rating_list.split(",")
+    ratings.each do |rating|
+      rating.strip!
+      #steps %Q{Then I should see "#{rating}"}
+      steps %Q{Then I should see /^#{rating}$/}
+    end
+  elsif neg
+    ratings = rating_list.split(",")
+    ratings.each do |rating|
+      rating.strip!
+      #steps %Q{Then I should not see /<td>#{rating}/}
+      steps %Q{Then I should not see /^#{rating}$/}
+    end
+  end 
 end
 
 Then /I should see all the movies/ do
